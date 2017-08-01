@@ -34,8 +34,7 @@ PHOTO_BASE_URL = "https://www.instagram.com/p/%s"
 ##########################################
 ## Start controlling the bot
 ##########################################
-#b = bot(input("username: "), getpass())
-b = bot("mcclane.howland", "$horecrest18")
+b = bot(input("username: "), getpass())
 
 ##########################################
 ## Get initial following count
