@@ -37,7 +37,6 @@ PHOTO_BASE_URL = "https://www.instagram.com/p/%s"
 b = bot(input("username: "), getpass())
 b.follow("taylorswift")
 b.unfollow("taylorswift")
-b = bot(input("username: "), getpass())
 
 ##########################################
 ## Get initial following count
