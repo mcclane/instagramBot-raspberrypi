@@ -97,7 +97,7 @@ class bot(object):
             self.driver.get(photo_url)
         while(True):
             try:
-                like_button = self.driver.find_element_by_class_name("_tk4ba")
+                like_button = self.driver.find_element_by_class_name("coreSpriteHeartOpen")
                 like_button.click()
                 self.l.log("liked photo "+photo_url, "INFO")
                 break
@@ -157,8 +157,8 @@ class bot(object):
             follow_page_link = self.driver.find_element_by_xpath("//*[contains(text(), 'following')]")
             follow_page_link.click()
             time.sleep(2)
-            unfollow_buttons = self.driver.find_elements_by_class_name("_ah57t")
-            usernames = self.driver.find_elements_by_class_name("_4zhc5")
+            unfollow_buttons = self.driver.find_elements_by_class_name("_qv64e")
+            usernames = self.driver.find_elements_by_class_name("_2g7d5")
             for i in range(len(unfollow_buttons)):
                 if(unfollow_count >= n):
                     break
