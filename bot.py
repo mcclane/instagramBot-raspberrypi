@@ -11,24 +11,28 @@ import re
 from logger import *
 
 class bot(object):
+
+    FOLLOW_URL = "https://www.instagram.com/web/friendships/%s/follow/"
+
+    #set user agent to mobile, more importantly not phantomjs
     dcap = dict(DesiredCapabilities.PHANTOMJS)
     dcap["phantomjs.page.settings.userAgent"] = ("Mozilla/5.0 (iPhone; CPU iPhone OS 10_0 like Mac OS X) AppleWebKit/602.1.38 (KHTML, like Gecko) Version/10.0 Mobile/14A5297c Safari/602.1")
     driver = webdriver.PhantomJS(desired_capabilities=dcap)
     session = requests.Session()
-
-    FOLLOW_URL = "https://www.instagram.com/web/friendships/%s/follow/"
-
-    wl = open("resources/whitelist.txt", "r").readlines()
+    #users I don't want to unfollow
+    w = open("resources/whitelist.txt", "r")
+    wl = w.readlines()
+    w.close()
 
     def __init__(self, username, password):
         self.username = username
         ####################################
-        ##SET UP LOGGER
+        ## SET UP LOGGER
         ####################################
         self.l = logger(self.username+".log")
 
         ####################################
-        ##LOGIN
+        ## LOGIN
         ####################################
         self.driver.get("https://www.instagram.com/accounts/login/")
         login_box = self.driver.find_element_by_name("username")
@@ -40,15 +44,11 @@ class bot(object):
         time.sleep(2)
 
         ####################################
-        ##SETUP THE REQUESTS SESSION
+        ## SETUP THE REQUESTS SESSION
         ####################################
         cookies = { cookie['name'] : cookie['value'] for cookie in self.driver.get_cookies() }
         requests.utils.add_dict_to_cookiejar(self.session.cookies, cookies)
-        
 
-    ####################################
-    ##FOLLOW
-    ####################################
     def follow(self, user):
         self.driver.get("https://www.instagram.com/"+user)
         time.sleep(1)
@@ -67,9 +67,7 @@ class bot(object):
             except Exception as err:
                 self.l.log("%s Trying follow user: %s" % (str(err), user), "ERROR")
                 return False
-    ####################################
-    ##UNFOLLOW
-    ####################################
+
     def unfollow(self, user):
         self.driver.get("https://www.instagram.com/"+user)
         time.sleep(1)
@@ -89,9 +87,7 @@ class bot(object):
             except Exception as err:
                 self.l.log("%s Trying unfollow user: %s" % (str(err), user), "ERROR")
                 return False
-    ####################################
-    ##LIKE
-    ####################################
+
     def like(self, photo_url=None):
         if(photo_url is not None):
             self.driver.get(photo_url)
@@ -109,9 +105,7 @@ class bot(object):
             except Exception as err:
                 self.l.log("%s Trying like photo: %s" % (str(err), self.driver.current_url), "ERROR")
                 break
-    ####################################
-    ##COMMENT
-    ####################################
+
     def comment(self, message, photo_url=None):
         if(photo_url is not None):
             self.driver.get(photo_url)
@@ -119,7 +113,7 @@ class bot(object):
             comment_sprite = self.driver.find_element_by_class_name("coreSpriteComment")
             comment_sprite.click()
             time.sleep(1)
-            text_box = self.driver.find_element_by_class_name("_2hc0g")
+            text_box = self.driver.find_element_by_class_name("_bilrf")
             time.sleep(1)
             text_box.send_keys(message)
             text_box.send_keys(Keys.ENTER)
@@ -140,9 +134,8 @@ class bot(object):
         self.driver.get("https://www.instagram.com/"+self.username)
         time.sleep(2)
         try:
-            return int(self.driver.find_elements_by_class_name("_bkw5z")[2].text.replace(",",""))
+            return int(self.driver.find_elements_by_class_name("_fd86t")[2].text.replace(",",""))
         except Exception as err:
-
             self.l.log("Error: %s \t while getting following count for self" % (str(err)), "ERROR")
             return 0
 
