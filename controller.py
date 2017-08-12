@@ -9,7 +9,7 @@ from bot import *
 ## CONSTANTS
 ############
 delay = 60
-howlong = 1000 #tags
+howlong = 0 #tags
 
 
 ####################
@@ -35,6 +35,7 @@ PHOTO_BASE_URL = "https://www.instagram.com/p/%s"
 ## Start controlling the bot
 ##########################################
 b = bot(input("username: "), getpass())
+# does it work?
 b.follow("taylorswift")
 b.unfollow("taylorswift")
 
@@ -78,7 +79,6 @@ followed_file.close()
 # Unfollow all the leaks
 ###########################
 current_following_count = b.get_following_count()
-#current_following_count = 394
 leak = current_following_count - initial_following_count
 print(current_following_count, initial_following_count, leak)
 b.unfollow_n_most_recent(leak)
