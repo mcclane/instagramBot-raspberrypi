@@ -8,18 +8,22 @@ from bot import *
 ############
 ## CONSTANTS
 ############
-delay = 60
-howlong = 0 #tags
+DELAY = 60 #seconds
+HOW_MANY_TAGS = 1000 #tags
+PIPE_DEPTH = 100 #people
 
 
 ####################
 ## get the resources
 ####################
-c = open("resources/compliment_words.txt", "r")
+#c = open("resources/compliment_words.txt", "r")
+cs = open("resources/compliment_strings.txt", "r")
 h = open("resources/hashtags.txt", "r")
-cl = c.readlines()
+#cl = c.readlines()
+csl = cs.readlines()
 hl = h.readlines()
-c.close()
+#c.close()
+cs.close()
 h.close()
 followed_file = open("resources/followed.txt", "a")
 
@@ -47,7 +51,7 @@ initial_following_count = 350
 
 
 followed_list = []
-for i in range(howlong):
+for i in range(HOW_MANY_TAGS):
     ##########################################
     ## Scrape user IDs, photo URLs from tag
     ##########################################
@@ -61,16 +65,15 @@ for i in range(howlong):
     for i in range(len(photo_urls)):
         b.like(photo_url=photo_urls[i])
         if(i == int(len(photo_urls)/2)):
-            b.comment(message="You are so "+cl[randint(0, len(cl)-1)]+"!", photo_url=None)
+            #b.comment(message="You are so "+cl[randint(0, len(cl)-1)]+"!", photo_url=None)
+            b.comment(message=csl[randint(0, len(csl)-1)], photo_url=None)
         if(b.follow(usernames[i])):
             followed_file.write(usernames[i]+"\n")
             followed_list.append(usernames[i])
-            if(len(followed_list) < 50): 
-                time.sleep(delay)
-                continue
-            b.unfollow(followed_list[0]) 
-            followed_list.pop(0)
-        time.sleep(delay)
+            if(len(followed_list) > PIPE_DEPTH):
+                b.unfollow(followed_list[0]) 
+                followed_list.pop(0)
+            time.sleep(DELAY)
 
 print("Non-unfollowed users: "+str(followed_list))
 followed_file.close()
