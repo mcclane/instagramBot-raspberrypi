@@ -116,7 +116,9 @@ class bot(object):
             text_box = self.driver.find_element_by_class_name("_bilrf")
             time.sleep(1)
             text_box.send_keys(message)
-            text_box.send_keys(Keys.ENTER)
+            #text_box.send_keys(Keys.ENTER)
+            post_button = self.driver.find_element_by_class_name("_55p7a")
+            post_button.click()
             self.l.log("commented "+message+" on "+self.driver.current_url, "INFO")
         except Exception as err:
             self.l.log("%s Trying to comment on photo: %s" % (str(err), self.driver.current_url), "ERROR")
